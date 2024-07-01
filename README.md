@@ -1,8 +1,7 @@
 # HR_analytics
-Analytics on the various factors affecting the attrition rate of the company.
+Analysis on the various factors affecting the attrition rate of the company.
 ## Problem Statement
-
-This dashboard helps the company understand their employees better. It helps the company know if their employees are satisfied with their job role. Through different ratings, they get to know their improvement area, & thus they can improve their services by identifying these area. It also lets them know the average attrition rate in departments and job roles, thus since by using this dashboard they have identified this problem, they can further work on factors responsible for these high attrition rate.
+This dashboard helps the company understand their employees better. It helps the company know if their employees are satisfied with their job role. Through different key areas, they get to know their improvement area, & thus they can improve their services by identifying these area. It also lets them know the average attrition rate in departments and job roles, thus since by using this dashboard they have identified this problem, they can further work on factors responsible for these high attrition rate.
 
 Since, number of neutral/dissatisfied employees (almost 16.2 %), thus in all they must work on improving their services.
 
@@ -12,167 +11,143 @@ Since, number of neutral/dissatisfied employees (almost 16.2 %), thus in all the
 - Step 2 : Open power query editor & in view tab under Data preview section, check "EmpID", "Attrition", "Department" and "JobRole" options.
 - Step 3 : Also since by default, profile will be opened only for 1000 rows so you need to select "column profiling based on entire dataset".
 - Step 4 : It was observed that in none of the columns errors & empty values were present except column named "YearsWithCurrManager".
-- Step 5 : For calculating average delay time, null values were not taken into account as only less than 1% values are null in this column(i.e column named "Arrival Delay") 
-- Step 6 : In the report view, under the view tab, theme was selected.
-- Step 7 : Since the data contains various ratings, thus in order to represent ratings, a new visual was added using the three ellipses in the visualizations pane in report view. 
-- Step 8 : Visual filters (Slicers) were added for one field named "Department".
-- Step 9 : Two card visuals were added to the canvas, one representing average departure delay in minutes & other representing average arrival delay in minutes.
-           Using visual level filter from the filters pane, basic filtering was used & null values were unselected for consideration into average calculation.
+- Step 5 : In the report view, under the view tab, theme was selected.
+- Step 6 : Various visualization were created based on the "AgeGroup","Attrition","Department","EducationField","Gender", "SalarySlab" and "JobRole". 
+- Step 7 : Visual filters (Slicers) were added for one field named "Department".
+- Step 8 : Multiple KPIs(Key Performance Indicator) were created to provide crucial information such as Total Employees, Attrition number and rate, Average age of employees, Avereage monthly salary and Average years at the company.
+
+Using visual level filter from the filters pane, basic filtering was used & null values were unselected for consideration into average calculation.
            
-           Although, by default, while calculating average, blank values are ignored.
-- Step 10 : A bar chart was also added to the report design area representing the number of satisfied & neutral/unsatisfied employees. While creating this visual, field named "Gender" was also added to the Legends bucket, thus number of employees are also seggregated according the gender. 
-- Step 11 : Ratings Visual was used to represent different ratings mentioned below,
-
-  (a) Baggage Handling
-
-  (b) Check-in Services
-  
-  (c) Cleanliness
-  
-  (d) Ease of online booking
-  
-  (e) Food & Drink
-  
-  (f) In-flight Entertainment
-
-  (g) In-flight Service
-  
-  (h) In-flight wifi service
-  
-  (i) Leg Room service
-  
-  (j) On-board service
-  
-  (k) Online boarding
-  
-  (l) Seat comfort
-  
-  (m) Departure & arrival time convenience
+Although, by default, while calculating average, blank values are ignored.
+- Step 9 : A bar chart was also added to the report design area representing the average age of employees in the company. While creating this visual, a new column was created to group the age into Age-Groups for better understanding.
   
 In our dataset, Some parameters were assigned value 0, representing those parameters are not applicable for some employees.
 
 All these values have been ignored while calculating average rating for each of the parameters mentioned above.
 
-- Step 12 : In the report view, under the insert tab, two text boxes were added to the canvas, in one of them name of the company was mentioned & in the other one company's tagline was written.
-- Step 13 : In the report view, under the insert tab, using shapes option from elements group a rectangle was inserted & similarly using image option company's logo was added to the report design area. 
-- Step 14 : Calculated column was created in which, employees were grouped into various age groups.
+- Step 10 : In the report view, one text box was added to the canvas, where the heading of the dashboard is mentioned.
+ 
+- Step 11 : Calculated column was created in which, employees were grouped into various age groups.
 
 for creating new column following DAX expression was written;
        
         Age Group = 
+        if(Age[Age]<=25, "18-25",
+
+        if(Age[Age]<=35, "26-35",
         
-        if(airline_passenger_satisfaction[Age]<=25, "0-25 (25 included)",
+        if(Age[Age]<=46, "36-46",
         
-        if(airline_passenger_satisfaction[Age]<=50, "25-50 (50 included)",
+        if(Age[Age]<=55, "46-55 (75 included)",
         
-        if(airline_passenger_satisfaction[Age]<=75, "50-75 (75 included)",
-        
-        "75-100 (100 included)")))
+        "55+")))
         
 Snap of new calculated column ,
+https://github.com/MuskaanBashal/HR_analytics/blob/f99ae6a472960a806ed1963916d57f177ae3e8db/Age-group.jpg
 
-![Snap_1](https://user-images.githubusercontent.com/102996550/174089602-ab834a6b-62ce-4b62-8922-a1d241ec240e.jpg)
-
-        
-- Step 15 : New measure was created to find total count of employees.
-
-Following DAX expression was written for the same,
-        
-        Count of employees = COUNT(airline_passenger_satisfaction[ID])
-        
-A card visual was used to represent count of employees.
-
-![Snap_Count](https://user-images.githubusercontent.com/102996550/174090154-424dc1a4-3ff7-41f8-9617-17a2fb205825.jpg)
-
-        
- - Step 16 : New measure was created to find  % of employees,
- 
- Following DAX expression was written to find % of employees,
- 
-         % employees = (DIVIDE(airline_passenger_satisfaction[Count of employees], 129880)*100)
- 
- A card visual was used to represent this perecntage.
- 
- Snap of % of employees who preferred business class
- 
- ![Snap_Percentage](https://user-images.githubusercontent.com/102996550/174090653-da02feb4-4775-4a95-affb-a211ca985d07.jpg)
-
- 
- - Step 17 : New measure was created to calculate total distance travelled by flights & a card visual was used to represent total distance.
- 
- Following DAX expression was written to find total distance,
- 
-         Total Distance Travelled = SUM(airline_passenger_satisfaction[Flight Distance])
-    
- A card visual was used to represent this total distance.
- 
- 
- ![Snap_3](https://user-images.githubusercontent.com/102996550/174091618-bf770d6c-34c6-44d4-9f5e-49583a6d5f68.jpg)
- 
- - Step 18 : The report was then published to Power BI Service.
- 
- 
-![Publish_Message](https://user-images.githubusercontent.com/102996550/174094520-3a845196-97e6-4d44-8760-34a64abc3e77.jpg)
-
-# Snapshot of Dashboard (Power BI Service)
-
-![dashboard_snapo](https://user-images.githubusercontent.com/102996550/174096257-11f1aae5-203d-44fc-bfca-25d37faf3237.jpg)
-
- 
- # Report Snapshot (Power BI DESKTOP)
-
- 
-![Dashboard_upload](https://user-images.githubusercontent.com/102996550/174074051-4f08287a-0568-4fdf-8ac9-6762e0d8fa94.jpg)
-
-# Insights
+Observations
 
 A single page report was created on Power BI Desktop & it was then published to Power BI Service.
 
+**Total Employees:** 1416 - The total number of employees in the organization.
+**Attrition**: 229 - The total number of employees who have left the company.
+**Attrition Rate**: 16.2% - The percentage of employees who have left the company.
+**Average Age**: 37 - The average age of the employees.
+**Average Monthly Salary**: 6.5K - The average monthly salary of the employees.
+**Average Years at Company**: 7 - The average number of years employees stay at the company.
+
 Following inferences can be drawn from the dashboard;
-
-### [1] Total Number of employees = 129880
-
-   Number of satisfied employees (Male) = 28159 (21.68 %)
-
-   Number of satisfied employees (Female) = 28269 (21.76 %)
-
-   Number of neutral/unsatisfied employees (Male) = 35822 (27.58 %)
-
-   Number of neutral/unsatisfied employees (Female) = 37630 (28.97 %)
-
-
-           thus, higher number of employees are neutral/unsatisfied.
            
-### [2] Average Ratings
+**Attrition by Education**
+Life Sciences: 38% - The percentage of employees with a Life Sciences background who have left.
+Medical: 25% - The percentage of employees with a Medical background who have left.
+Technical Degree: 14% - The percentage of employees with a Technical Degree who have left.
+Marketing: 13% - The percentage of employees with a Marketing background who have left.
+Other: 5% - The percentage of employees with other educational backgrounds who have left.
 
-    a) Baggage Handling - 3.63/5
-    b) Check-in Service - 3.31/5
-    c) Cleanliness - 3.29/5
-    d) Ease of online booking - 2.88/5
-    e) Food & Drink - 3.21/5
-    f) In-flight Entertainment - 3.36/5
-    g) In-flight service - 3.64/5
-    h) In-flight Wifi service - 2.81/5
-    i) Leg room service - 3.37/5
-    j) On-board service - 3.38/5
-    k) Online boarding - 3.33/5
-    l) Seat comfort - 3.44/5
-    m) Departure & arrival convenience - 3.22/5
-  
-  while calculating average rating, null values have been ignored as they were not relevant for some employees. 
-  
-  These ratings will change if different visual filters will be applied.  
-  
-  ### [3] Average Delay 
-  
-      a) Average delay in arrival(minutes) - 15.09
-      b) Average delay in departure(minutes) - 14.71
-Average delay will change if different visual filters will be applied.
+**Attrition by Age**
+26-35 years: 111 employees - The highest number of employees who left fall in this age group.
+18-25 years: 43 employees
+36-45 years: 41 employees
+46-55 years: 26 employees
+55+ years: 8 employees
 
- ### [4] Some other insights
- 
- ### Class
- 
- 1.1) 47.87 % employees travelled by Business class.
- 
- 1.2) 44.89 % employees travelled by Economy class.
+**Attrition by Gender**
+Male: 145 employees
+Female: 84 employees
+
+**Attrition by Job Role**
+Sales Representative: 33 employees
+Sales Executive: 55 employees
+Research Scientist: 44 employees
+Laboratory Technician: 60 employees
+Human Resources: 12 employees
+
+**Attrition by Departments**
+Research & Development: 127 employees - The highest attrition is in this department.
+Sales: 90 employees
+Human Resources: 12 employees
+
+**Attrition by Salary**
+Up to 5k: 69% - The majority of attrition occurs among employees with a salary up to 5k.
+5k-10k: 20.96%
+10k-15k: 7.68%
+15k+: The least attrition happens in this salary range.
+
+**Attrition by Years at Company**
+The highest attrition happens at the 1-year mark with 57 employees leaving.
+
+**Useful Insights:**
+**Insight 1: High Attrition Among 26-35 Year Olds**
+Observation: The highest attrition is among employees aged 26-35 (111 employees).
+Strategy:
+Career Development: Implement more robust career development and advancement opportunities tailored for this age group, as they are likely seeking growth and progression in their careers.
+Mentorship Programs: Establish mentorship programs where younger employees can be guided and supported by more experienced staff.
+Work-Life Balance: Offer flexible working hours and remote work options to cater to their potential family and personal life needs.
+
+**Insight 2: High Attrition in Research & Development Department**
+Observation: The Research & Development department has the highest attrition (127 employees).
+Strategy:
+Job Satisfaction: Conduct surveys and focus groups to understand specific issues within this department, such as workload, job satisfaction, or management practices.
+Professional Growth: Invest in continuous training and professional development programs to keep employees engaged and up-to-date with the latest industry trends.
+Recognition and Rewards: Implement recognition and reward systems to appreciate the hard work and achievements of the employees in this department.
+
+**Insight 3: Attrition by Education**
+Observation: Employees with a Life Sciences background have the highest attrition (38%).
+Strategy:
+Targeted Engagement: Develop engagement programs specifically for employees with a Life Sciences background, focusing on their career aspirations and professional growth.
+Tailored Development Programs: Offer specialized training and development programs to ensure they see a clear path to growth within the company.
+
+**Insight 4: Attrition by Salary**
+Observation: The majority of attrition is among employees earning up to 5k (69%).
+Strategy:
+Competitive Compensation: Review and adjust compensation packages to ensure they are competitive within the industry.
+Benefits and Perks: Enhance non-monetary benefits such as health insurance, wellness programs, and other perks that can improve job satisfaction.
+Performance Bonuses: Introduce performance-based bonuses and incentives to reward and retain high-performing employees.
+
+**Insight 5: High Attrition Among Sales Executives and Laboratory Technicians**
+Observation: High attrition among Sales Executives (55) and Laboratory Technicians (60).
+Strategy:
+Sales Executives:
+Training and Support: Provide continuous sales training and adequate support to help them meet their targets and reduce job stress.
+Clear Career Path: Define clear career progression paths to motivate and retain them.
+Laboratory Technicians:
+Work Environment: Improve the work environment by ensuring adequate resources and reducing work-related stress.
+Job Security: Enhance job security by offering long-term contracts or permanent positions.
+
+**Insight 6: Gender-Specific Attrition**
+Observation: Higher attrition among male employees (145) compared to female employees (84).
+Strategy:
+Inclusive Policies: Develop policies and practices that support both genders equally, such as parental leave, flexible working arrangements, and gender diversity programs.
+Focus Groups: Conduct focus groups to understand the specific needs and challenges faced by male employees and address them appropriately.
+
+**Insight 7: Early Tenure Attrition**
+Observation: High attrition at the 1-year mark (57 employees).
+Strategy:
+Onboarding Programs: Enhance the onboarding process to ensure new hires are well-integrated and supported during their first year.
+Probation Reviews: Implement regular check-ins and performance reviews during the first year to address any issues early on.
+Buddy System: Introduce a buddy system where new employees are paired with experienced staff to help them acclimate to the company culture and processes.
+
+
+By addressing these insights with targeted strategies, the company can improve employee retention, reduce attrition rates, and create a more engaged and satisfied workforce.
+
